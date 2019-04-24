@@ -39,37 +39,49 @@ public class GameManager : MonoBehaviour
         {
             DontDestroyOnLoad(gameObject);
         }
+        playerPrefab = Instantiate(playerPrefab);
+        playerPrefab.SetActive(false);
+       
     }
 
     private void Start()
     {
         currentHealth = maxHealth; //Have current health be initiated with maxHealth
         //healthUI.fillAmount = currentHealth / maxHealth;
-
+         RecordLastScene.records.Record(-9.079158f, 0f, "Level1-1");
     }
 
     private void Update()
     {
         //Set our GUI value to our GUI_ACTIVE boolean
-        healthUIParent.gameObject.SetActive(GUI_ACTIVE);
+        healthUIParent.gameObject.SetActive(GUI_ACTIVE);//Will be added for final this is the UI for health. Not in project four but will be in final. 
 
         //Testing to see if AdjustHealth works
         if (Input.GetKey(KeyCode.Backspace)) AdjustHealth(-1, 1);
         if (Input.GetKey(KeyCode.Return)) AdjustHealth(1, 1);
+
+        if (healthUI.fillAmount == 0)
+            Die();
 
         
     }
 
     public void Goto_Scene(string scene_name) {
         scene_name = Scene_Name;
-        if (scene_name != null) SceneManager.LoadScene(scene_name);
+        if (scene_name != null) SceneManager.LoadScene(scene_name);//Go to scene.
+        
         
     }
 
     void Die()
     {
-        healthUIParent.gameObject.SetActive(GUI_ACTIVE);
-        SceneManager.LoadScene("Lose_Screen");
+        if (playerPrefab.activeInHierarchy == true)
+        {
+            GUI_ACTIVE = false;
+            healthUIParent.gameObject.SetActive(GUI_ACTIVE);//when die takes to death screen. 
+            SceneManager.LoadScene("Lose_Screen");
+            playerPrefab.SetActive(false);
+        }
     }
 
     public void AdjustHealth(int sign, float value)
@@ -93,7 +105,7 @@ public class GameManager : MonoBehaviour
 
         if (healthUI.fillAmount == 0)
         {
-            GUI_ACTIVE = false;
+            GUI_ACTIVE = false;//this code is the GUI code it allows for player health to show. 
             Die();
         }
 

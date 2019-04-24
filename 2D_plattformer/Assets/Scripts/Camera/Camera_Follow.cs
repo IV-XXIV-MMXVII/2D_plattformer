@@ -18,15 +18,15 @@ public class Camera_Follow : MonoBehaviour
     }
 
     void FixedUpdate()
-    {                                                                                               /********************************************************/
-        Vector3 setCoordinate = target.transform.position + offset;                                           //We create a Vector3 that will grab the Player's       *
-                                                                                                    //position and add it to the camera offset              *
-        Vector3 smoothPosition = Vector3.Lerp(transform.position, setCoordinate, smoothOutDuration);//We'll create another Vector3 that will go from        *
-                                                                                                    //it's current spot to the player in a smooth motion    *
-                                                                                                    //with a set amount of time.                            *
-        transform.position = smoothPosition;                                                        //The smoothPosition variable will then be added to     *
-                                                                                                    //the Camera's Transforma Component, applying the change*
-                                                                                                    //in position every frame assuring that it smoothes out.*
-                                                                                                    /********************************************************/
+    {        //We create a Vector3 that will grab the Player's                                                                                        
+        Vector3 setCoordinate = target.transform.position + offset;  //position and add it to the camera offset                                                         
+        
+        Vector3 smoothPosition = Vector3.Lerp(transform.position, setCoordinate, smoothOutDuration);//We'll create another Vector3 that will go from        
+                                                                                                    //it's current spot to the player in a smooth motion    
+                                                                                                    //with a set amount of time.                            
+        transform.position = smoothPosition;                                                        //The smoothPosition variable will then be added to     
+                                                                                                    //the Camera's Transforma Component, applying the change
+                                                                                                    //in position every frame assuring that it smoothes out.
+                                                                                                  
     }
 }

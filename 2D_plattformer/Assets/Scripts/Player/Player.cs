@@ -7,21 +7,21 @@ public class Player : MonoBehaviour
 {
     public float speed; //Speed of movement
     public float maxSpeed; //Our max speed
-    public float setMaxSpeed;
+    public float setMaxSpeed;//max speed set point. 
     public float jumpForce; //The amount of jump
 
     bool step = false;
 
-    public int totalJumps;
+    public int totalJumps;//jump total 
     public static int __totalJumps;
-    [HideInInspector] public int SetValueOfJjumps;
+    [HideInInspector] public int SetValueOfJjumps;//number of jumps. 
     public static int __SetValueOfJumps;
 
     Transform player;
 
-    [HideInInspector] public static bool grounded = false;
+    [HideInInspector] public static bool grounded = false;//not on ground. 
 
-    [HideInInspector] public bool isWalking;
+    [HideInInspector] public bool isWalking;//walking
 
 
     [HideInInspector] public static Animator __animator; //Our player's animator
@@ -31,19 +31,19 @@ public class Player : MonoBehaviour
     Rigidbody2D rb; //Our rigidbody 2D
 
     [Header("Ground Check")]
-    public Collider2D groundCheck;
+    public Collider2D groundCheck;//collider 2D stops player from just falling through map. 
 
     [Header("Key Mapping")]
     //Map movement to a selected key
-    public KeyCode right = KeyCode.RightArrow;
-    public KeyCode left = KeyCode.LeftArrow;
-    public KeyCode jump = KeyCode.Z;
+    public KeyCode right = KeyCode.RightArrow;//moves player forward. 
+    public KeyCode left = KeyCode.LeftArrow;//moves player backward. 
+    public KeyCode jump = KeyCode.Z;//allows player to jump. 
 
     //Flipping the image with this enumerator
     [HideInInspector] public enum DIRECTION
     {
-        LEFT = -1,
-        RIGHT = 1
+        LEFT = -1,//speed moving backward. 
+        RIGHT = 1//speed moving forward. 
     }
 
     //Events
@@ -75,7 +75,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         //Set up bool for animator
-        animator.SetBool("isWalking", isWalking);
+        animator.SetBool("isWalking", isWalking);//This thread animates jumping for the player character so when it jumps it can make certain animations. This is the bool for that. 
         Debug.Log("Is Grounded" + grounded);
         Debug.Log("Set Value of Jumps: " + SetValueOfJjumps);
         Debug.Log("Total Jumps Left: " + totalJumps);
@@ -93,7 +93,6 @@ public class Player : MonoBehaviour
         {
             totalJumps = SetValueOfJjumps;
         }
-
     }
 
     private void OnCollisionStay2D(Collision2D collision)
@@ -107,34 +106,34 @@ public class Player : MonoBehaviour
     //Moving to the right
     public void MoveRight()
     {
-        coroutine = Walk();
+        coroutine = Walk();//walking
 
-        isWalking = true;
+        isWalking = true;//when is walking. 
 
-        Flip(DIRECTION.RIGHT);
+        Flip(DIRECTION.RIGHT);//flips direction. 
 
         if (rb.velocity.magnitude < maxSpeed) {
-            rb.velocity += new Vector2(speed, 0);
+            rb.velocity += new Vector2(speed, 0);//speed of walking. 
         }
 
         if (grounded == true) StartCoroutine(coroutine);
 
-        if (Input.GetKeyDown(jump) && totalJumps != 0)
+        if (Input.GetKeyDown(jump) && totalJumps != 0)//jump total. 
             Jump();
     }
 
     //Moving to the left
-    public void MoveLeft()
+    public void MoveLeft()//moving left. 
     {
-        coroutine = Walk();
+        coroutine = Walk();//walking left. 
 
         isWalking = true;
 
-        Flip(DIRECTION.LEFT);
+        Flip(DIRECTION.LEFT);//flips direction. 
 
-        if (rb.velocity.magnitude < maxSpeed)
+        if (rb.velocity.magnitude < maxSpeed)//max speed. 
         {
-            rb.velocity += new Vector2(-speed, 0);
+            rb.velocity += new Vector2(-speed, 0);//speed of walking. 
         }
 
         if (grounded == true) StartCoroutine(coroutine);
@@ -144,11 +143,11 @@ public class Player : MonoBehaviour
     }
 
     //Jumping
-    public void Jump()
+    public void Jump()//jumping. 
     {
         coroutine = Walk();
         StopCoroutine(coroutine);
-        maxSpeed = maxSpeed * 2;
+        maxSpeed = maxSpeed * 2;//speed of jump. 
         grounded = false;
         animator.SetBool("grounded", grounded);
         rb.velocity = new Vector2(rb.velocity.x, jumpForce);
@@ -162,13 +161,13 @@ public class Player : MonoBehaviour
         Vector3 xscale;
         switch (direction)
         {
-            case DIRECTION.RIGHT:
+            case DIRECTION.RIGHT://flips image on axis when moving right. 
                 xscale = gameObject.transform.localScale;
                 xscale.x = (float)DIRECTION.RIGHT;
                 gameObject.transform.localScale = xscale;
                 break;
 
-            case DIRECTION.LEFT:
+            case DIRECTION.LEFT://flips image on axis when moving left. 
                 xscale = gameObject.transform.localScale;
                 xscale.x = (float)DIRECTION.LEFT;
                 gameObject.transform.localScale = xscale;
@@ -178,7 +177,7 @@ public class Player : MonoBehaviour
 
     public IEnumerator Walk()
     {
-        //This will produce footstep noises as we move
+        //This produces footstep noises as we move
         if (step == false)
         {
             FindObjectOfType<AudioManager>().Play("Walk");
@@ -190,12 +189,16 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Bullet")
+        if (collision.gameObject.tag == "Bullet")//This allows for bullet from turret to kill player. 
         {
-            GameManager.instance.healthUIParent.gameObject.SetActive(false);
-            GameManager.instance.Scene_Name = "Lose_Screen";
-            GameManager.instance.Goto_Scene(GameManager.instance.Scene_Name);
-            Destroy(gameObject);
+            GameManager.instance.AdjustHealth(-1, 5f);
+        } else if (collision.gameObject.tag == "Deadzone")
+        {
+            GameManager.instance.AdjustHealth(-1, 100f);
+        }
+        else if (collision.gameObject.tag == "Mine")//this allows mine to do damage to player. 
+        {
+            GameManager.instance.AdjustHealth(-1, 25f);
         }
     }
 }

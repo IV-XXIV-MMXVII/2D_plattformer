@@ -9,7 +9,7 @@ public class GroundCheck : MonoBehaviour
         if (collision.gameObject.name == "Tilemap")
         {
             
-            Player.grounded = true;
+            Player.grounded = true;//Grounds player so does not fall through ground. 
             Player.__animator.SetBool("grounded", Player.grounded);
         }
     }
@@ -17,7 +17,7 @@ public class GroundCheck : MonoBehaviour
     {
         if (collision.gameObject.name == "Tilemap")
         {
-            Player.grounded = false;
+            Player.grounded = false;//If not grounded player will fall. This meants on tile map. 
             Player.__animator.SetBool("grounded", Player.grounded);
         }
     }

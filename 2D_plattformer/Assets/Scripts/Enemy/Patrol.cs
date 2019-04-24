@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Patrol : MonoBehaviour
+public class Patrol : MonoBehaviour// all code on this page is usless. I decided to go a different rout with my enemies. instead of finding player the enemies sit still and shoot in a single line!!!!!! 
+    //this makes it harder for the player to platform as they also must dodge the enemy fire wile trying to plattfom. I wanted to keep this code in so you could see how i decided to change this!!!!!!!
 {
     public float speed;
     public float distance;
@@ -13,6 +14,7 @@ public class Patrol : MonoBehaviour
     {
 
          transform.Translate(Vector2.right * speed);
+                                                    
       
     }
 

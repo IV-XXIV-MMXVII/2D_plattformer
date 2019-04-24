@@ -11,7 +11,7 @@ public class AudioManager : MonoBehaviour
     void Awake()
     {
         if (instance == null)
-        {
+        {//Allows for audio to be played in game.
             instance = this;
             DontDestroyOnLoad(this.gameObject);
         } else
@@ -24,7 +24,7 @@ public class AudioManager : MonoBehaviour
             a.source = gameObject.AddComponent<AudioSource>();
             a.source.clip = a.clip;
 
-            a.source.volume = a.volume;
+            a.source.volume = a.volume;//set volume. 
             a.source.pitch = a.pitch;
             a.source.loop = a.enableLoop;
         }
@@ -32,7 +32,7 @@ public class AudioManager : MonoBehaviour
 
     // Update is called once per frame
     public void Play(string name)
-    {
+    {//
         Audio a = Array.Find(getAudio, sound => sound.name == name);
         if (a == null) { Debug.LogWarning("Sound name " + name + " was not found."); return; }
         a.source.Play();
